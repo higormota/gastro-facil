@@ -1,12 +1,14 @@
 <?php
 
-namespace App;
+namespace App\Entities;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Entities\Recipe;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
 
@@ -16,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email','phone','password'
     ];
 
     /**
@@ -36,4 +38,28 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+
+    public function recipes()
+    {
+      return $this->hasMany(Recipe::class);
+    }
+
+    public function favorites()
+    {
+      return $this->hasMany(UserFavorites::class);
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+         return [
+            'email' => $this->email
+         ];
+    }
 }

@@ -17,3 +17,18 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+/**
+ * Definição de rotas de autenticaçaõ de usuário
+ * =============================================
+ */
+Route::post('register',['as' => 'user.register','uses' => 'AuthController@register']);
+Route::post('login',['as' => 'user.login','uses' => 'AuthController@login']);
+
+/**
+ * Definição de rotas da receitas
+ * ===========================
+ */
+Route::apiResource('recipe', 'RecipeController');
+Route::apiResource('rating', 'RatingController');
+Route::post('recipe/{recipe}/ratings', 'RatingController@store');
