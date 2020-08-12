@@ -26,9 +26,14 @@ Route::post('register',['as' => 'user.register','uses' => 'AuthController@regist
 Route::post('login',['as' => 'user.login','uses' => 'AuthController@login']);
 
 /**
- * Definição de rotas da receitas
+ * Definição de rotas
  * ===========================
  */
 Route::apiResource('recipe', 'RecipeController');
 Route::apiResource('rating', 'RatingController');
+Route::apiResource('review', 'ReviewController');
+Route::apiResource('report', 'ReportController');
+Route::apiResource('user',   'UserController');
 Route::post('recipe/{recipe}/ratings', 'RatingController@store');
+Route::get('/categories', 'RecipeController@getCategories');
+Route::get('profile', 'UserController@show');

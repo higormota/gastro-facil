@@ -13,6 +13,7 @@
     <h1>Login</h1>
 
     {!! Form::open(['route'=> 'user.login','method' => 'post']) !!}
+    {{ csrf_field() }}
     <label>Usuário</label><br />
     <label>{!! Form::text('username',null)!!}</label><br />
     <label>Senha</label><br />

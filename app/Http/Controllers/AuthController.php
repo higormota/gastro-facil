@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Entities\User;
 use JWTAuth;
 use JWTFactory;
+use App\Http\Controllers\UserController;
+use Illuminate\Http\RedirectResponse;
 
 class AuthController extends Controller
 {
@@ -19,8 +21,9 @@ class AuthController extends Controller
       ]);
 
       $token = auth()->login($user);
-
-      return $this->respondWithToken($token);
+      
+      return redirect()->action('UserController@show',$user);
+      //return $this->respondWithToken($token);
     }
 
     public function login(Request $request)

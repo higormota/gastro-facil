@@ -3,6 +3,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Entities\Categories;
+use App\Http\Resources\CategoriesResource;
 
 class RecipeResource extends JsonResource
 {
@@ -27,6 +29,7 @@ class RecipeResource extends JsonResource
             'ratings'           => $this->ratings,
             'images'            => $this->images,
             'stuffs'            => $this->stuffs,
+            'categories'        => $this->categories,
             'average_rating'    => $this->ratings->avg('rating')
             
           ];
