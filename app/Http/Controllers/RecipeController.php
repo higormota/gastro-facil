@@ -12,6 +12,7 @@ use App\Entities\RecipePreparation;
 use App\Entities\RecipeStuff;
 use App\Http\Resources\RecipeResource;
 use App\Http\Resources\CategoriesResource;
+use Illuminate\Support\Facades\DB;
 
 class RecipeController extends Controller
 {
@@ -19,7 +20,7 @@ class RecipeController extends Controller
   
   public function __construct()
     {
-      $this->middleware('auth:api')->except(['index', 'show','store','getCategories']);
+      $this->middleware('auth:api')->except(['index', 'show','store','getCategories','search','getRecipesOfDay']);
     }
     /**
      * Display a listing of the resource.
@@ -137,6 +138,59 @@ class RecipeController extends Controller
      * ===================================
      */
     public function  getCategories(){
-      return response()->json(Categories::all(),200);
+      return CategoriesResource::collection(Categories::all());
+      //return response()->json(Categories::all(),200);
     }
+    
+    
+    /**
+     * ==================================
+     * Methot to get a 10 randomic Recipes Of Day
+     * ===================================
+     */
+    public function getRecipesOfDay(){
+      return RecipeResource::collection(Recipe::inRandomOrder()->limit(10)->get());
+    }
+
+    /**
+     * ==================================
+     * Dinamyc method to search Recipes. 
+     * You can pass as parameters a list of categories, a name or recipe or list of stuffs
+     * Return a json object with  basic recipe data
+     * ===================================
+     */
+    public function search(Request $request){
+      $name = $request->name;
+      $categories = $request->categories;
+      $stuffs = $request->stuffs;
+
+
+      $query = DB::table('recipes');
+
+      if($categories){
+        $query = $query->join('recipe_categories', function ($join) use($categories) {
+                              $join->on('recipes.id', '=', 'recipe_categories.recipe_id')
+                                   ->whereIn('recipe_categories.categories_id',$categories);
+                              });
+      }
+
+      if($stuffs){
+        $query = $query->join('recipe_stuffs',function ($join) use($stuffs) {
+                              $join->on('recipes.id', '=', 'recipe_stuffs.recipe_id')
+                                   ->whereIn('recipe_stuffs.name',$stuffs);
+                              });
+      }
+
+      $query =  $query->select('recipes.*');
+      
+      if($name){
+        $query =  $query->where('recipes.name',$name);
+      }
+
+      $recipes = $query->get();
+      
+      return response()->json($recipes, 200);
+    }
+
+
 }

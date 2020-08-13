@@ -30,7 +30,7 @@ class RecipeResource extends JsonResource
             'images'            => $this->images,
             'stuffs'            => $this->stuffs,
             'categories'        => $this->categories,
-            'average_rating'    => $this->ratings->avg('rating')
+            'average_rating'    => $this->ratings->count()
             
           ];
     }

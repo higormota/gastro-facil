@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Entities\Categories;
 
 class CategoriesResource extends JsonResource
 {
@@ -15,7 +16,7 @@ class CategoriesResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
+            'id'   => $this->id,
             'name' => $this->name,
         ];
     }

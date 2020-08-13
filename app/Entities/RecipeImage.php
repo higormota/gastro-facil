@@ -7,7 +7,8 @@ use App\Entities\Recipe;
 
 class RecipeImage extends Model
 {
-    protected $fillable = ['recipe_id','uri'];
+    protected $fillable = ['uri'];
+    protected $hidden = ['recipe_id','created_at', 'updated_at', ];
 
     public function recipe()
     {

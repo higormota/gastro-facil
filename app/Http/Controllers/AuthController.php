@@ -8,6 +8,7 @@ use JWTAuth;
 use JWTFactory;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\RedirectResponse;
+use App\Http\Resources\UserResource;
 
 class AuthController extends Controller
 {
@@ -22,7 +23,10 @@ class AuthController extends Controller
 
       $token = auth()->login($user);
       
-      return redirect()->action('UserController@show',$user);
+      return new UserResource($user);
+
+      //return redirect()->route('user',[$user]);
+      //return redirect()->action('UserController@show',$user);
       //return $this->respondWithToken($token);
     }
 
@@ -32,12 +36,12 @@ class AuthController extends Controller
 
   
       if (!$token = auth()->attempt($credentials)) {
-        return response()->json(['error' => 'Unauthorized'], 401);
+        return response()->json(['error' => 'Usuário e senha não correspondem'], 401);
       }
 
-
-      return $this->respondWithToken($token);
-      
+      $user = User::where('email',$request->email)->first();
+      return response()->json($user,200);
+      //return $this->respondWithToken($token);
     }
 
 

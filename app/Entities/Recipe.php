@@ -9,14 +9,17 @@ use App\Entities\RecipeStuff;
 use App\Entities\User;
 use App\Entities\Categories;
 use App\Entities\RecipePreparation;
+use App\Entities\UserFavorites;
+use Illuminate\Support\Facades\DB;
 
 
 class Recipe extends Model
 {
 
     protected $fillable = ['name','yield','calories','user_id'];
+    protected $hidden = ['created_at', 'updated_at', ];
 
-
+   
     public function user()
     {
       return $this->belongsTo(User::class);
@@ -24,7 +27,7 @@ class Recipe extends Model
 
     public function ratings()
     {
-      return $this->hasMany(Rating::class);
+      return $this->hasMany(UserFavorites::class);
     }
 
     public function images()

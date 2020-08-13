@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class UserFavorites extends Model
 {
     protected $fillable = ['user_id', 'recipe_id'];
+    protected $hidden = ['created_at', 'updated_at', ];
 
     public function recipe()
     {

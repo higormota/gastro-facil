@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class RecipePreparation extends Model
 {
-    protected $fillable =  ['recipe_id','step'];
+    protected $fillable =  ['step'];
+    protected $hidden = ['recipe_id','created_at', 'updated_at', ];
 
     public function recipe()
     {

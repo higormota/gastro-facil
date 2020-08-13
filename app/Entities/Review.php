@@ -10,6 +10,7 @@ use App\Entities\Recipe;
 class Review extends Model
 {
     protected $fillable =  ['recipe_id','user_id','comment'];
+    protected $hidden = ['created_at', 'updated_at', ];
 
     public function recipe()
     {

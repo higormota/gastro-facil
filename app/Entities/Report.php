@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class Report extends Model
 {
     protected $fillable =  ['recipe_id','user_id','report'];
+    protected $hidden = ['created_at', 'updated_at', ];
 
     public function recipe()
     {

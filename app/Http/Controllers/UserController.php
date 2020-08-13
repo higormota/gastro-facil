@@ -3,14 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Entities\User;
+use App\Entities\Recipe;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\RecipeResource;
+use App\Entities\UserFavorites;
 
 class UserController extends Controller
 {
     public function __construct()
     {
-      $this->middleware('auth:api')->except(['index', 'show']);
+      $this->middleware('auth:api')->except(['index', 'show','userRecipes','userFavorites','flagFavorite']);
     }
     /**
      * Display a listing of the resource.
@@ -75,11 +79,36 @@ class UserController extends Controller
     }
 
 
-    public function userRecipes(){
-        //TODO: return a list of user's created recipes 
+    public function userRecipes(Request $request){
+
+        $user_id = $request->user_id;
+        $recipes = Recipe::where('user_id', $user_id)
+                        ->orderBy('name', 'desc')
+                        ->get();
+
+        return response()->json($recipes,200);
     }
 
-    public function userFavorites(){
-        //TODO: return a list of user's favorites
+    public function userFavorites(Request $request){
+        $user = User::find($request->user_id);
+        
+        $recipes = [];
+        foreach($user->favorites as $favorite){
+            $recipes[] = Recipe::where('id',$favorite->recipe_id)
+                                ->orderBy('name', 'desc')
+                                ->get();
+
+        }
+
+        return response()->json($recipes,200);
+        
+    }
+
+    public function flagFavorite(Request $request){
+        $userFavorite = UserFavorites::create([
+                'user_id' => $request->user_id,
+                'recipe_id' => $request->recipe_id,
+              ]);
+        return response()->json("Receita adicionada aos favoritos",200);     
     }
 }
