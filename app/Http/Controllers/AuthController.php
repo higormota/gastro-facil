@@ -12,6 +12,13 @@ use App\Http\Resources\UserResource;
 
 class AuthController extends Controller
 {
+  /**
+   * ==========================================================
+   * Method: create user system
+   * Params: Json request with name, phone, email and password
+   * Return: Array of created user
+   * ==========================================================
+   */
     public function register(Request $request)
     {
       $user = User::create([
@@ -30,6 +37,13 @@ class AuthController extends Controller
       //return $this->respondWithToken($token);
     }
 
+    /**
+     * =====================================
+     * Method: user login
+     * Params: email and password
+     * Return: json of user 
+     * ======================================
+     */
     public function login(Request $request)
     {
       $credentials = $request->only(['email', 'password']);
@@ -40,12 +54,16 @@ class AuthController extends Controller
       }
 
       $user = User::where('email',$request->email)->first();
-      return response()->json($user,200);
-      //return $this->respondWithToken($token);
+       return redirect()->action('UserController@show',$user);
     }
 
 
-
+    /**
+     * =======================================
+     * Method: get a token for system access
+     * Return: json contains a token
+     * =======================================
+     */
     protected function respondWithToken($token)
     {
       return response()->json([

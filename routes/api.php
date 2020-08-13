@@ -38,6 +38,8 @@ Route::post('recipe/{recipe}/ratings', 'RatingController@store');
 Route::get('/categories', 'RecipeController@getCategories');
 Route::get('/recipeOfDay', 'RecipeController@getRecipesOfDay');
 Route::get('/userRecipes', 'UserController@userRecipes');
+Route::get('/userReviews', 'UserController@userReviews');
 Route::get('/favorites', 'UserController@userFavorites');
 Route::post('/flagFavorite', 'UserController@flagFavorite');
+Route::post('/flagUtil', 'ReviewController@flagUtil');
 Route::post('/search', 'RecipeController@search');

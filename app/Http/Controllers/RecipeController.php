@@ -17,27 +17,33 @@ use Illuminate\Support\Facades\DB;
 class RecipeController extends Controller
 {
 
-  
+  /**
+   * =============================
+   * Method: constructor  
+   * =============================
+   */
   public function __construct()
     {
       $this->middleware('auth:api')->except(['index', 'show','store','getCategories','search','getRecipesOfDay']);
     }
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * ===========================================
+     * Method: Display a listing of all recipes.
+     * Return: array of all recipes
+     * ===========================================
      */
     public function index()
     {
-        return RecipeResource::collection(Recipe::with('ratings')->paginate(25));
+        return RecipeResource::collection(Recipe::all());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+  /**
+   * =======================================================
+   * Method: create Rating, access from POST
+   * Params: json request with user_id, name, yield,calories, stuffs, images, categories, preparation_mode
+   * Return: Array of created Recipe
+   * ========================================================
+   */
     public function store(Request $request)
     {
         $recipe = Recipe::create([
@@ -90,10 +96,11 @@ class RecipeController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  Recipe  $id
-     * @return \Illuminate\Http\Response
+     * ===============================
+     * Method: Display specifc recipe.
+     * Params: Recipe object or valid id of recipe
+     * Return: array of the recipes
+     * ===============================
      */
     public function show(Recipe $recipe)
     {
@@ -101,11 +108,11 @@ class RecipeController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * ==================================================
+     * Method: Update a specific recipe, access from PUT.
+     * Params: recipe to update, current user_id
+     * Return: array of the recipe updated
+     * ====================================================
      */
     public function update(Request $request, Recipe $recipe)
     {
@@ -120,22 +127,26 @@ class RecipeController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @return \Illuminate\Http\Response
+     * ==================================================
+     * Method: Delete a specific recipe, access from DELETE.
+     * Params: recipe to delete
+     * Return: name of deleted recipe
+     * ====================================================
      */
     public function destroy(Recipe $recipe)
     {
+        $recipeDel = $recipe->name;
         $recipe->delete();
 
-      return response()->json(null, 204);
+      return response()->json($recipeDel, 204);
     }
 
 
     /**
-     * ==================================
-     * Methot to get a json list of Categories
-     * ===================================
+     * ======================================
+     * Methot: get a json list of Categories
+     * Return: Array list of all categories
+     * =======================================
      */
     public function  getCategories(){
       return CategoriesResource::collection(Categories::all());
@@ -144,25 +155,33 @@ class RecipeController extends Controller
     
     
     /**
-     * ==================================
-     * Methot to get a 10 randomic Recipes Of Day
-     * ===================================
+     * =========================================
+     * Methot: get a 10 randomic Recipes Of Day
+     * Return: Array list of 10 randomic recipes
+     * =========================================
      */
     public function getRecipesOfDay(){
       return RecipeResource::collection(Recipe::inRandomOrder()->limit(10)->get());
     }
 
     /**
-     * ==================================
-     * Dinamyc method to search Recipes. 
-     * You can pass as parameters a list of categories, a name or recipe or list of stuffs
-     * Return a json object with  basic recipe data
-     * ===================================
+     * =============================================
+     * Method: Dinamyc search of Recipes. 
+     * Params: You can pass as parameters a list of categories, 
+     *         a name or recipe or list of stuffs.
+     * Return: a json object with  basic recipe data
+     * ===============================================
      */
     public function search(Request $request){
       $name = $request->name;
       $categories = $request->categories;
       $stuffs = $request->stuffs;
+
+      if($request->lostPoints){
+        $user = User::find($request->user_id)->first();
+        $user->points = $user->points - 5;
+        $user->save();
+      }
 
 
       $query = DB::table('recipes');

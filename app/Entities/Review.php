@@ -6,10 +6,11 @@ namespace App\Entities;
 use Illuminate\Database\Eloquent\Model;
 use App\Entities\User;
 use App\Entities\Recipe;
+use App\Entities\ReviewImages;
 
 class Review extends Model
 {
-    protected $fillable =  ['recipe_id','user_id','comment'];
+    protected $fillable =  ['recipe_id','user_id','comment','ratings'];
     protected $hidden = ['created_at', 'updated_at', ];
 
     public function recipe()
@@ -22,8 +23,13 @@ class Review extends Model
       return $this->belongsTo(User::class);
     }
 
-    public function ratings()
+    public function feedback()
     {
       return $this->hasMany(ReviewRating::class);
+    }
+
+    public function images()
+    {
+      return $this->hasMany(ReviewImages::class);
     }
 }

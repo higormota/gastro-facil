@@ -18,6 +18,7 @@ class CreateRecipesTable extends Migration
             $table->string('name');
             $table->string('yield')->nullable();
             $table->string('calories')->nullable();
+            $table->string('ratings')->default(0);
             $table->unsignedInteger('user_id');
             
             $table->timestamps();

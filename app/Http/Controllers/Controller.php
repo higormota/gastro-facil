@@ -12,16 +12,18 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     /**
-     * Method to user login View
-     * =========================
+     * ===============================
+     * Method to call user login View
+     * ===============================
      */
     public function loginView(){
         return view('user.login');
     }
 
     /**
-     * Method to user register View
-     * =========================
+     * ==================================
+     * Method to call user register View
+     * ==================================
      */
     public function registerView(){
         return view('user.register');

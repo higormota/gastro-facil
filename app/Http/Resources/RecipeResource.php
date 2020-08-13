@@ -27,10 +27,11 @@ class RecipeResource extends JsonResource
             'created_at'        => (string) $this->created_at,
             'updated_at'        => (string) $this->updated_at,
             'ratings'           => $this->ratings,
+            'ratings_avg'       => $this->avg('ratings'),
             'images'            => $this->images,
             'stuffs'            => $this->stuffs,
             'categories'        => $this->categories,
-            'average_rating'    => $this->ratings->count()
+            'reviews'           => $this->reviews,      
             
           ];
     }
