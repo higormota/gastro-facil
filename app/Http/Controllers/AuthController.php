@@ -30,7 +30,7 @@ class AuthController extends Controller
 
       $token = auth()->login($user);
       
-      return new UserResource($user);
+      return new UserResource(User::find($user)->first());
 
       //return redirect()->route('user',[$user]);
       //return redirect()->action('UserController@show',$user);

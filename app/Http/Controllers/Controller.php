@@ -28,4 +28,9 @@ class Controller extends BaseController
     public function registerView(){
         return view('user.register');
     }
+
+
+    public function index(){
+        
+    }
 }

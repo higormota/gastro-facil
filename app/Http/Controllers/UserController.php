@@ -21,7 +21,7 @@ class UserController extends Controller
    */
     public function __construct()
     {
-      $this->middleware('auth:api')->except(['show','userRecipes','userFavorites','flagFavorite','userReviews']);
+      $this->middleware('auth:api')->except(['show','userRecipes','userFavorites','flagFavorite','userReviews','update']);
     }
     
     /**
@@ -67,6 +67,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+      return response()->json(['error' => 'Você só pode atualizar seus dados'], 403);
     // check if currently authenticated user is the owner of register user
       if ($request->user()->id !== $user->user_id) {
         return response()->json(['error' => 'Você só pode atualizar seus dados'], 403);
@@ -168,5 +169,16 @@ class UserController extends Controller
 
 
         return ReviewResource::collection($reviews);
+    }
+
+
+    public static function userPoints($user_id,$points,$add){
+        $user = User::find($user_id)->first();
+        if($add){
+          $user->points = $user->points+$points;                              
+        }else{
+          $user->points = $user->points < $points ? 0 : $user->points-$points;   
+        }
+        $user->save(); 
     }
 }

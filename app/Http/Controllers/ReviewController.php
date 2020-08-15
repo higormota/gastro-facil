@@ -69,9 +69,7 @@ class ReviewController extends Controller
                 $review->save();
       }
 
-      $user = User::find($review->user)->first();
-      $user->points++;                
-      $user->save();
+      UserController::userPoints($request->user_id,1,true);
       
     }
    

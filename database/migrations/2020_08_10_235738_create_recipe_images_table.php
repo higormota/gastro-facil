@@ -19,6 +19,7 @@ class CreateRecipeImagesTable extends Migration
             $table->string('uri');
             $table->timestamps();
 
+
         });
     }
 

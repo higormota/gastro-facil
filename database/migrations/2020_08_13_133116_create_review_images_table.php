@@ -14,7 +14,7 @@ class CreateReviewImagesTable extends Migration
     public function up()
     {
         Schema::create('review_images', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->unsignedInteger('review_id');
             $table->string('uri');
             $table->timestamps();

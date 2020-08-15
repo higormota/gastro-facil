@@ -11,7 +11,6 @@ use App\Http\Resources\RatingResource;
 class RatingController extends Controller
 {
 
-
   /**
    * =============================
    * Method: constructor  

@@ -15,8 +15,8 @@ class CreateRecipeStuffsTable extends Migration
     {
         Schema::create('recipe_stuffs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('recipe_id');
             $table->string('name');
+            $table->unsignedInteger('recipe_id');
             $table->unsignedInteger('quantity');
             $table->string('metric');
             $table->timestamps();

@@ -14,7 +14,7 @@ class CreateRecipePreparationsTable extends Migration
     public function up()
     {
         Schema::create('recipe_preparations', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->unsignedInteger('recipe_id');
             $table->string("step");
             $table->timestamps();

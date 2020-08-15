@@ -11,11 +11,15 @@ use App\Entities\RecipeImage;
 use App\Entities\RecipePreparation;
 use App\Entities\RecipeStuff;
 use App\Http\Resources\RecipeResource;
+use App\Http\Controllers\UserController;
 use App\Http\Resources\CategoriesResource;
 use Illuminate\Support\Facades\DB;
 
 class RecipeController extends Controller
 {
+
+  private $recipe_create_points = 5;
+  private $search_lost_points = 5;
 
   /**
    * =============================
@@ -91,8 +95,9 @@ class RecipeController extends Controller
           }
         }
 
+        UserController::userPoints($request->user_id,$this->recipe_create_points,true);
     
-          return new RecipeResource($recipe);
+        return new RecipeResource($recipe);
     }
 
     /**
@@ -177,10 +182,13 @@ class RecipeController extends Controller
       $categories = $request->categories;
       $stuffs = $request->stuffs;
 
+      
+
       if($request->lostPoints){
-        $user = User::find($request->user_id)->first();
-        $user->points = $user->points - 5;
-        $user->save();
+        if(User::find($request->user_id)->first()->points < $this->search_lost_points){
+          return response()->json("Você não tem pontos suficientes", 401);
+        }
+        UserController::userPoints($request->user_id,$this->search_lost_points,false);
       }
 
 
